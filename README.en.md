@@ -37,7 +37,14 @@ The local server is Pact's native **consumer** virtualization. The Verifier's in
 
 Names vary between runs and use type matching. Booleans and dates have exact values because they define the prepared states. Extra provider properties do not break the consumer; whole-JSON equality is not the contract.
 
-The sensitivity check **changes the contract**, not the service. It proves detection of an incompatible type expectation. Native output shows an intentional failure; the test only passes for exactly one type mismatch at the expected field. Network, authentication or cleanup failure cannot count as detection of incompatibility.
+## Case: from requirement to rejection
+
+- **Example rule:** the [consumer](src/booking-client.js) uses an integer price, deposit status and dates; an absent booking returns `null`.
+- **Strategy:** partition paid/pending deposits and deleted bookings. Verify those states at the HTTP boundary without depending on a graphical interface.
+- **Controlled failure:** the [sensitivity test](tests/contracts.test.js) changes only the `totalprice` expectation to a string. The provider still returns an integer; Pact must identify exactly `$.totalprice`. This is a deliberately introduced incompatibility, not a defect found in the service.
+- **Evidence:** the [October 6, 2026 run](https://github.com/brunobaccari/pact-api-contracts/actions/runs/37511425649) passed all five tests, detected that mismatch and confirmed GET 404 for all four created bookings. See the summary and `pact-results` artifact (14 days).
+- **Decision:** an actual contract mismatch, skipped test or incomplete cleanup blocks CI. Network errors do not prove incompatibility: investigate the environment before rerunning. A real mismatch requires agreement between consumer and provider before changing the expectation.
+- **Remaining review:** check pricing rules and UI behavior in the integrated product. This example verifies compatibility; it does not authorize provider deployment.
 
 ## Results
 

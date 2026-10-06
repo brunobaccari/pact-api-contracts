@@ -37,7 +37,14 @@ O servidor local é a virtualização nativa do **consumidor**, parte do funcion
 
 Nomes variam por execução e são comparados por tipo. Booleanos e datas têm valores exatos porque definem os estados preparados. Propriedades extras do provedor não quebram o consumidor; não usamos igualdade de JSON completo como contrato.
 
-A verificação de sensibilidade **altera o contrato**, não o serviço. Ela prova que uma expectativa incompatível de tipo é detectada. O log nativo mostra uma falha intencional; o teste só passa se houver uma única divergência de tipo no campo correto. Erro de rede, autenticação ou limpeza não vale como detecção de incompatibilidade.
+## Case: do requisito ao bloqueio
+
+- **Regra do exemplo:** o [consumidor](src/booking-client.js) usa preço inteiro, estado do depósito e datas; uma reserva ausente retorna `null`.
+- **Estratégia:** particionar depósito pago/pendente e reserva excluída. Verificar esses estados na fronteira HTTP, sem depender de uma interface gráfica.
+- **Falha controlada:** o [teste de sensibilidade](tests/contracts.test.js) troca apenas a expectativa de `totalprice` para string. O provedor continua retornando inteiro; o Pact deve apontar exatamente `$.totalprice`. Isso é uma incompatibilidade provocada, não um defeito encontrado no serviço.
+- **Evidência:** a [execução de 06/10/2026](https://github.com/brunobaccari/pact-api-contracts/actions/runs/37511425649) aprovou os cinco testes, detectou essa divergência e confirmou GET 404 para as quatro reservas criadas. Consulte o summary e o artifact `pact-results` (14 dias).
+- **Decisão:** contrato real divergente, teste ignorado ou limpeza incompleta bloqueiam o CI. Erro de rede não prova incompatibilidade: investigar ambiente antes de repetir. Uma divergência real pede acordo entre consumidor e provedor antes de mudar a expectativa.
+- **Revisão restante:** conferir regras de preço e comportamento da interface no produto integrado. Este exemplo verifica compatibilidade; não autoriza implantação do provedor.
 
 ## Resultados
 
