@@ -65,3 +65,5 @@ This is a shared public API: other users or a service reset can delete our recor
 We do not control the provider's code or deployed version. This is a sample consumer and compatibility verification of the currently available API. There is no Pact Broker, contract publication, version matrix or `can-i-deploy`, so this is not a deployment gate between two teams. That would require both projects to participate in the publication and verification workflow.
 
 References: [matching and provider-state generators](https://docs.pact.io/implementation_guides/javascript/docs/matching), [verification and state handlers](https://docs.pact.io/implementation_guides/javascript/docs/provider) and [API](https://restful-booker.herokuapp.com/apidoc/index.html).
+
+Husky: with Node 24 and the stack dependencies installed, run `npm ci` to enable pre-commit. `npm run check:local` checks the diff, report gate and existing type/lint checks. The hook also rejects ignored files in the index. Browser, emulator and API tests remain in CI.

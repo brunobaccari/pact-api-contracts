@@ -3,11 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "pretest": "node scripts/prepare.js",
     "test": "node --env-file-if-exists=.env --test --test-concurrency=1 --test-reporter=spec --test-reporter=junit --test-reporter-destination=stdout --test-reporter-destination=results/junit.xml tests/contracts.test.js",
-    "test:gate": "python -m unittest discover -s scripts -p test_summary.py"
+    "test:gate": "python -m unittest discover -s scripts -p test_summary.py",
+    "prepare": "husky",
+    "check:local": "git diff --cached --check && python -m unittest discover -s scripts -p test_summary.py"
   },
-  "devDependencies": { "@pact-foundation/pact": "17.1.4" }
+  "devDependencies": {
+    "@pact-foundation/pact": "17.1.4",
+    "husky": "9.1.7"
+  }
 }

@@ -65,3 +65,5 @@ API pública compartilhada: outro usuário ou reinicialização pode remover nos
 Não controlamos o código ou a versão implantada do provedor. Este é um consumidor demonstrativo e uma verificação de compatibilidade da API disponível. Não há Pact Broker, publicação de contratos, matriz de versões ou `can-i-deploy`; portanto não é um gate de implantação entre duas equipes. Para esse uso, ambos os projetos precisariam participar do fluxo de publicação e verificação.
 
 Referências consultadas: [matching e provider-state generators](https://docs.pact.io/implementation_guides/javascript/docs/matching), [verificação e state handlers](https://docs.pact.io/implementation_guides/javascript/docs/provider) e [API](https://restful-booker.herokuapp.com/apidoc/index.html).
+
+Husky: com Node 24 e as dependências da stack instalados, rode `npm ci` para ativar o pre-commit. `npm run check:local` verifica o diff, o gate dos relatórios e os checks de tipos/lint existentes. O hook também bloqueia arquivos ignorados no índice. Testes que usam navegador, emulador ou API continuam no CI.

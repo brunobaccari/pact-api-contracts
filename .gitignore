@@ -5,3 +5,4 @@ pacts/
 logs/
 __pycache__/
 *.log
+.husky/_/
